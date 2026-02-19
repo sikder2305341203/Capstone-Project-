@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Profile</title>
+    <style>
+        body { font-family: Arial; background-color: #f4f4f4; padding: 40px; text-align: center;}
+        .container { background: white; padding: 30px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0px 0px 15px #ccc;}
+        input, select, button { width: 90%; padding: 10px; margin: 10px 0; font-size: 16px; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Personalize Your Plan</h2>
+        <form method="POST">
+            <input type="number" name="age" placeholder="Age" required>
+            <input type="number" name="weight" step="0.1" placeholder="Weight in KG" required>
+            <input type="number" name="height" placeholder="Height in CM" required>
+            
+            <select name="goal" required>
+                <option value="" disabled selected>Select Your Goal</option>
+                <option value="Weight Loss">Weight Loss</option>
+                <option value="Weight Gain">Weight Gain</option>
+                <option value="Maintain Health">Maintain Health</option>
+            </select>
+
+            <select name="activity" required>
+                <option value="" disabled selected>Favorite Outdoor Activity</option>
+                <option value="Walking">Brisk Walking</option>
+                <option value="Cycling">Riding / Cycling</option>
+                <option value="Hiking">Hiking / Trekking</option>
+            </select>
+            
+            <button type="submit">Generate My Plan</button>
+        </form>
+    </div>
+</body>
+</html>
