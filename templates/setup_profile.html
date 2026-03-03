@@ -1,38 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <title>Setup Profile</title>
     <style>
-        body { font-family: Arial; background-color: #f4f4f4; padding: 40px; text-align: center;}
-        .container { background: white; padding: 30px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0px 0px 15px #ccc;}
-        input, select, button { width: 90%; padding: 10px; margin: 10px 0; font-size: 16px; }
-        button { background-color: #007bff; color: white; border: none; cursor: pointer; }
+        body {
+            font-family: 'Georgia', serif;
+            text-align: center;
+            background-color: #F3EFE3;
+            color: #5A2E14;
+            padding-top: 50px;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 40px;
+            width: 400px;
+            margin: auto;
+            border-radius: 15px;
+            border: 2px dashed #8AB83A;
+        }
+
+        input,
+        select {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #c8bca7;
+            border-radius: 10px;
+        }
+
+        .btn {
+            background-color: #8AB83A;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <h2>Personalize Your Plan</h2>
+    <div class="box">
+        <h2>Tell us about yourself</h2>
         <form method="POST">
             <input type="number" name="age" placeholder="Age" required>
-            <input type="number" name="weight" step="0.1" placeholder="Weight in KG" required>
-            <input type="number" name="height" placeholder="Height in CM" required>
-            
+            <input type="number" step="0.1" name="weight" placeholder="Weight (kg)" required>
+            <input type="number" step="0.1" name="height" placeholder="Height (cm)" required>
             <select name="goal" required>
                 <option value="" disabled selected>Select Your Goal</option>
                 <option value="Weight Loss">Weight Loss</option>
                 <option value="Weight Gain">Weight Gain</option>
-                <option value="Maintain Health">Maintain Health</option>
+                <option value="Maintenance">Maintenance</option>
             </select>
-
+            <select name="workout_location" required>
+                <option value="" disabled selected>Where will you workout?</option>
+                <option value="Home">Home (No Equipment)</option>
+                <option value="Gym">Gym (Weights & Machines)</option>
+            </select>
             <select name="activity" required>
-                <option value="" disabled selected>Favorite Outdoor Activity</option>
-                <option value="Walking">Brisk Walking</option>
-                <option value="Cycling">Riding / Cycling</option>
-                <option value="Hiking">Hiking / Trekking</option>
+                <option value="" disabled selected>Favorite Activity</option>
+                <option value="Walking">Walking</option>
+                <option value="Running">Running</option>
+                <option value="Weightlifting">Weightlifting</option>
+                <option value="Yoga">Yoga</option>
             </select>
-            
-            <button type="submit">Generate My Plan</button>
+            <button type="submit" class="btn">Save Profile</button>
         </form>
     </div>
 </body>
+
 </html>

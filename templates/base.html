@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FitAlgorithm Pro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f7f6;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #5A2E14;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            color: #8AB83A;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 20px;
+            text-decoration: none;
+            border-bottom: 1px solid #734020;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #8AB83A;
+            padding-left: 30px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #8AB83A;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>🌿 FitAlgorithm</h2>
+        <a href="/dashboard">📊 Dashboard</a>
+        <a href="/training">🏋️ Training Program</a>
+        <a href="/log_progress">📝 Log Daily Progress</a>
+        <a href="/about">ℹ️ About Us</a>
+        <a href="/contact">📞 Contact Us</a>
+        <a href="/research">🎓 University Research</a>
+        <a href="/logout" style="color: #ffcccc;">🚪 Logout</a>
+    </div>
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
