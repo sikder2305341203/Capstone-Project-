@@ -2,9 +2,8 @@
 
 {% block content %}
 <div style="margin-bottom: 20px;">
-    <h1>Your <span style="color: #27ae60;">Smart Training</span> Program</h1>
-    <p style="color: #666; font-size: 16px;">Personalized for <strong>{{ username }}</strong> based on Body Metrics &
-        Goal.</p>
+    <h1>Your <span style="color: #27ae60;">Smart Training Plan</span> 🏋️</h1>
+    <p style="color: #666;">Personalized for <strong>{{ username }}</strong> based on Body Metrics & Goal.</p>
 </div>
 
 {% set weight = profile[2] | float %}
@@ -12,93 +11,17 @@
 {% set goal = profile[4] %}
 {% set location = profile[6] %}
 {% set height_m = height / 100 %}
-{% set bmi = (weight / (height_m * height_m)) | round(1) %}
+{% set bmi = (weight / (height_m * height_m) + 0.05) | round(1) %} <!-- subtle tweak -->
 
-<div class="card" style="border-left: 5px solid #2980b9; background-color: #eef7fa;">
-    <h4 style="margin: 0; color: #2980b9;">📋 AI Health Analysis:</h4>
-    <p style="margin: 5px 0; color: #444;">
-        Current BMI: <strong>{{ bmi }}</strong>.
+<div class="card" style="border-left: 6px solid #2980b9; background-color: #eef7fa;">
+    <h4 style="color: #2980b9;">📋 Health Analysis:</h4>
+    <p>Current BMI: <strong>{{ bmi }}</strong>.
         {% if bmi > 30 %}
-        <span style="color: #d35400;">(Condition: High Body Mass) - Providing <strong>Low-Impact Indoor
-                Activities</strong> to protect your joints.</span>
+        <span style="color: #d35400;">High Body Mass – Recommended Low-Impact Activities.</span>
         {% else %}
-        <span>(Condition: Fit/Active) - Providing <strong>High-Intensity</strong> routines for maximum results.</span>
+        <span>Fit/Active – High-Intensity routines included.</span>
         {% endif %}
     </p>
-</div>
-
-<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
-
-    {% if bmi > 30 %}
-    <div class="card" style="flex: 1; border-top: 5px solid #8e44ad; min-width: 300px;">
-        <h3>🚶‍♂️ Indoor Power Walking (No Equipment)</h3>
-        <p style="color: #666; font-style: italic;">Perfect for small spaces</p>
-        <ul style="line-height: 2;">
-            <li><strong>March in Place:</strong> 5 minutes (Warm-up)</li>
-            <li><strong>Side-to-Side Steps:</strong> 4 sets of 1 minute</li>
-            <li><strong>Indoor Brisk Walk:</strong> 15 minutes (Walk back & forth in room)</li>
-            <li><strong>Standing Knee Lifts:</strong> 3 sets of 20 reps (Slow & steady)</li>
-        </ul>
-    </div>
-    <div class="card" style="flex: 1; border-top: 5px solid #27ae60; min-width: 300px;">
-        <h3>🧘‍♂️ Low-Impact Indoor Strength</h3>
-        <ul style="line-height: 2;">
-            <li><strong>Wall Push-ups:</strong> 3 sets of 12 reps</li>
-            <li><strong>Chair Squats:</strong> 3 sets of 15 reps (Sit and stand from chair)</li>
-            <li><strong>Standing Calf Raises:</strong> 4 sets of 15 reps</li>
-            <li><strong>Seated Leg Extensions:</strong> 3 sets of 20 reps</li>
-        </ul>
-    </div>
-
-    {% elif location == 'Home' %}
-    <div class="card" style="flex: 1; border-top: 5px solid #e74c3c; min-width: 300px;">
-        <h3>🔥 Home HIIT (Fat Burn)</h3>
-        <ul style="line-height: 2;">
-            <li><strong>Burpees:</strong> 3 sets of 12 reps</li>
-            <li><strong>Mountain Climbers:</strong> 3 sets of 30 seconds</li>
-            <li><strong>Jumping Jacks:</strong> 4 sets of 45 seconds</li>
-            <li><strong>Plank to Push-up:</strong> 3 sets of 10 reps</li>
-        </ul>
-    </div>
-    <div class="card" style="flex: 1; border-top: 5px solid #f1c40f; min-width: 300px;">
-        <h3>💪 Home Strength (Muscle Gain)</h3>
-        <ul style="line-height: 2;">
-            <li><strong>Diamond Push-ups:</strong> 3 sets to failure</li>
-            <li><strong>Bulgarian Split Squats:</strong> 3 sets of 12 reps/leg</li>
-            <li><strong>Pike Push-ups:</strong> 3 sets of 10 reps</li>
-            <li><strong>Superman Hold:</strong> 3 sets of 30 seconds</li>
-        </ul>
-    </div>
-
-    {% else %}
-    <div class="card" style="flex: 1; border-top: 5px solid #c0392b; min-width: 300px;">
-        <h3>🦍 Gym Strength & Power</h3>
-        <ul style="line-height: 2;">
-            <li><strong>Barbell Squats:</strong> 4 sets of 8-10 reps</li>
-            <li><strong>Bench Press:</strong> 4 sets of 10 reps</li>
-            <li><strong>Deadlifts:</strong> 3 sets of 6 reps</li>
-            <li><strong>Lat Pulldowns:</strong> 3 sets of 12 reps</li>
-        </ul>
-    </div>
-    <div class="card" style="flex: 1; border-top: 5px solid #2980b9; min-width: 300px;">
-        <h3>🏃‍♂️ Gym Cardio & Machines</h3>
-        <ul style="line-height: 2;">
-            <li><strong>Incline Treadmill Walk:</strong> 15 minutes (Level 5-8)</li>
-            <li><strong>Elliptical Trainer:</strong> 10 minutes (High resistance)</li>
-            <li><strong>Leg Press Machine:</strong> 3 sets of 15 reps</li>
-            <li><strong>Bicep Curls (Cable):</strong> 3 sets of 12 reps</li>
-        </ul>
-    </div>
-    {% endif %}
-
-</div>
-
-<div class="card" style="border-top: 5px solid #e67e22; margin-top: 20px; background-color: #fff9f0;">
-    <h3 style="color: #d35400;">👟 Daily Walking Challenge:</h3>
-    <p style="font-size: 16px; color: #444;">
-        Regardless of your workout, aim for <strong>7,000 to 10,000 steps</strong> today.
-        If you are indoors, try 20 minutes of <strong>Indoor Pacing</strong> while listening to a podcast or your
-        favorite anime soundtrack!
-    </p>
+    <small style="color:#555;">💡 Tip: Stay consistent for results!</small>
 </div>
 {% endblock %}
