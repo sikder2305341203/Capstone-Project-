@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+    /* --- Main Page Styles --- */
+    .shop-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 30px;
+        background: linear-gradient(135deg, #5A2E14, #2c160a);
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .product-card {
+        background: var(--card-bg, #ffffff);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border-top: 5px solid #8AB83A;
+        transition: 0.3s;
+        position: relative;
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-img-styled {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+    }
+
+    .product-title {
+        font-size: 19px;
+        font-weight: bold;
+        color: var(--text-color, #333);
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 24px;
+        color: #d35400;
+        font-weight: bold;
+        margin-bottom: 18px;
+    }
+
+    /* BUY NOW Button Style */
+    .btn-buy {
+        background-color: #5A2E14;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
+        transition: 0.3s;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-buy:hover {
+        background-color: #8AB83A;
+        transform: scale(1.02);
+    }
+
+    .tag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #e74c3c;
+        color: white;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 20px;
+        z-index: 10;
+    }
+
+    /* --- Modal & Form Styles --- */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        overflow-y: auto;
+    }
+
+    .modal-content {
+        background: #fff;
+        margin: 2% auto;
+        padding: 25px;
+        width: 500px;
+        border-radius: 15px;
+        color: #333;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .delivery-partner {
+        background: #f4f4f4;
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 5px solid #5A2E14;
+        margin: 15px 0;
+        font-size: 14px;
+    }
+
+    .payment-methods {
+        display: flex;
+        justify-content: space-around;
+        margin: 15px 0;
+        gap: 10px;
+    }
+
+    .pay-btn {
+        border: 2px solid #ddd;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        flex: 1;
+        text-align: center;
+        background: #fff;
+        transition: 0.3s;
+    }
+
+    .pay-btn.active {
+        border-color: #8AB83A;
+        background: #f0f9eb;
+    }
+
+    .pay-btn img {
+        height: 28px;
+        display: block;
+        margin: 0 auto 5px;
+    }
+
+    /* --- Receipt Preview --- */
+    #receiptPreview {
+        background: #fafafa;
+        border: 2px dashed #bbb;
+        padding: 20px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        color: #000;
+        margin: 20px 0;
+        border-radius: 5px;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="shop-header">
+    <h1>🛒 <span style="color: #8AB83A;">Well Move</span> Store</h1>
+    <p>Official Activewear by FitAlgorithm</p>
+</div>
+
+<div class="product-grid">
+    <div class="product-card">
+        <img src="{{ url_for('static', filename='images/tshirt.avif') }}" class="product-img-styled">
+        <div class="product-title">Well Move Dri-Fit Gym Tee</div>
+        <div class="product-price">৳ 1,200</div>
+        <button class="btn-buy" onclick="openCheckout('Well Move Dri-Fit Gym Tee', 1200)">Buy Now</button>
+    </div>
+
+    <div class="product-card">
+        <span class="tag">Bestseller</span>
+        <img src="{{ url_for('static', filename='images/tshirt.webp') }}" class="product-img-styled">
+        <div class="product-title">Well Move Oversized Pump Cover</div>
+        <div class="product-price">৳ 1,500</div>
+        <button class="btn-buy" onclick="openCheckout('Well Move Oversized Pump Cover', 1500)">Buy Now</button>
+    </div>
+
+    <div class="product-card">
+        <img src="{{ url_for('static', filename='images/shoe.avif') }}" class="product-img-styled">
+        <div class="product-title">Well Move Elite Running Shoes</div>
+        <div class="product-price">৳ 2,800</div>
+        <button class="btn-buy" onclick="openCheckout('Well Move Elite Running Shoes', 2800)">Buy Now</button>
+    </div>
+
+    <div class="product-card">
+        <span class="tag" style="background-color: #2980b9;">New Arrival</span>
+        <img src="{{ url_for('static', filename='images/shoe.webp') }}" class="product-img-styled">
+        <div class="product-title">Well Move Pro-Lift Squat Shoes</div>
+        <div class="product-price">৳ 3,000</div>
+        <button class="btn-buy" onclick="openCheckout('Well Move Pro-Lift Squat Shoes', 3000)">Buy Now</button>
+    </div>
+</div>
+
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <h2 style="margin-top:0; color:#5A2E14; text-align:center;">Quick Checkout</h2>
+        <form id="orderForm">
+            <div style="display:flex; gap:10px;">
+                <div class="form-group" style="flex:1;"><label>Size</label><select id="sizeSelect">
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select></div>
+                <div class="form-group" style="flex:1;"><label>Area</label><select id="areaSelect"
+                        onchange="updateTotal()">
+                        <option value="100">Inside Dhaka (৳100)</option>
+                        <option value="150">Outside Dhaka (৳150)</option>
+                    </select></div>
+            </div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="custName" placeholder="Rifat Sikder"
+                    required></div>
+            <div class="form-group"><label>Address</label><input type="text" id="custAddr"
+                    placeholder="House 12, Road 5, Dhaka" required></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="custPhone" placeholder="01734120341"
+                    required></div>
+
+            <div class="delivery-partner">
+                <strong>Delivery Partner: <span style="color: #d35400;">Quick Link</span></strong><br>
+                <small><i>"Your Product, Our Responsibility"</i></small>
+            </div>
+
+            <label><strong>Payment Method (SSLCommerz)</strong></label>
+            <div class="payment-methods">
+                <div class="pay-btn" onclick="setPayment('bkash', this)"><img
+                        src="https://logos-download.com/wp-content/uploads/2022/01/BKash_Logo.png"><small>bKash</small>
+                </div>
+                <div class="pay-btn" onclick="setPayment('nagad', this)"><img
+                        src="https://www.tbsnews.net/sites/default/files/styles/infograph/public/images/2021/04/05/nagad_logo.png"><small>Nagad</small>
+                </div>
+                <div class="pay-btn" onclick="setPayment('visa', this)"><img
+                        src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg"><small>Visa</small>
+                </div>
+            </div>
+
+            <div style="text-align:center; font-size:22px; font-weight:bold; margin:15px 0; color:#27ae60;">Total:
+                ৳<span id="totalDisplay">0</span></div>
+            <button type="button" class="btn-buy" style="background:#27ae60;" onclick="showPreview()">Preview
+                Receipt</button>
+            <button type="button" class="btn-buy" style="background:#e74c3c; margin-top:8px;"
+                onclick="closeCheckout()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<div id="previewModal" class="modal">
+    <div class="modal-content" style="width:550px;">
+        <h2 style="text-align:center; color:#5A2E14;">Order Summary Preview</h2>
+        <div id="receiptPreview"></div>
+        <button class="btn-buy" style="background:#27ae60;" onclick="confirmAndDownload()">Pay & Download
+            Receipt</button>
+        <button class="btn-buy" style="background:#5A2E14; margin-top:8px;" onclick="backToCheckout()">Back to
+            Edit</button>
+    </div>
+</div>
+
+<script>
+    let itemPrice = 0, selectedItemName = '', selectedMethod = '', orderID = '';
+    const myBkash = "01734120341"; // Your bKash number
+
+    function openCheckout(name, price) {
+        itemPrice = price; selectedItemName = name;
+        updateTotal();
+        document.getElementById('checkoutModal').style.display = 'block';
+    }
+
+    function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
+    function backToCheckout() { document.getElementById('previewModal').style.display = 'none'; document.getElementById('checkoutModal').style.display = 'block'; }
+    function updateTotal() { let delivery = parseInt(document.getElementById('areaSelect').value); document.getElementById('totalDisplay').innerText = itemPrice + delivery; }
+    function setPayment(method, el) { selectedMethod = method; document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
+
+    function showPreview() {
+        const name = document.getElementById('custName').value;
+        if (!name || !selectedMethod) { alert("Please fill all details!"); return; }
+        orderID = "WM-" + Math.floor(Math.random() * 1000000);
+        const total = document.getElementById('totalDisplay').innerText;
+        const size = document.getElementById('sizeSelect').value;
+
+        let previewHTML = `
+            <div style="text-align:center;"><strong>WELL MOVE STORE</strong><br><small>Your Product, Our Responsibility</small></div>
+            <hr>
+            <strong>Order ID:</strong> ${orderID}<br>
+            <strong>Product:</strong> ${selectedItemName} (Size: ${size})<br>
+            <strong>Customer:</strong> ${name}<br>
+            <strong>Delivery:</strong> Quick Link<br>
+            <hr>
+            <div style="font-size:18px; text-align:center; color:#27ae60;"><strong>Amount: ৳${total}</strong></div>
+            <hr>
+            <div style="color:#d35400; text-align:center;">Pay to bKash: <strong>${myBkash}</strong></div>
+        `;
+        document.getElementById('receiptPreview').innerHTML = previewHTML;
+        document.getElementById('checkoutModal').style.display = 'none';
+        document.getElementById('previewModal').style.display = 'block';
+    }
+
+    function confirmAndDownload() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const name = document.getElementById('custName').value;
+        const addr = document.getElementById('custAddr').value;
+        const phone = document.getElementById('custPhone').value;
+        const total = document.getElementById('totalDisplay').innerText;
+
+        doc.setFontSize(22); doc.setTextColor(90, 46, 20);
+        doc.text("WELL MOVE OFFICIAL RECEIPT", 105, 20, { align: "center" });
+
+        doc.setFontSize(12); doc.setTextColor(0);
+        doc.text(`Order ID: ${orderID} | Date: ${new Date().toLocaleDateString()}`, 20, 35);
+        doc.line(20, 38, 190, 38);
+
+        doc.setFont(undefined, 'bold'); doc.text("SHIPPING DETAILS:", 20, 50);
+        doc.setFont(undefined, 'normal');
+        doc.text(`Name: ${name}`, 20, 58); doc.text(`Phone: ${phone}`, 20, 65);
+        doc.text(`Address: ${addr}`, 20, 72); doc.text(`Partner: Quick Link ("Your Product, Our Responsibility")`, 20, 79);
+
+        doc.line(20, 85, 190, 85);
+        doc.setFont(undefined, 'bold'); doc.text("ORDER SUMMARY:", 20, 95);
+        doc.setFont(undefined, 'normal');
+        doc.text(`Product: ${selectedItemName}`, 20, 103);
+        doc.setFontSize(16); doc.setTextColor(39, 174, 96);
+        doc.text(`GRAND TOTAL: BDT ${total}`, 20, 115);
+
+        doc.line(20, 125, 190, 125);
+        doc.setFontSize(12); doc.setTextColor(211, 84, 0);
+        doc.text(`PAYMENT: SSLCommerz (${selectedMethod.toUpperCase()})`, 20, 135);
+        doc.text(`PLEASE PAY TO BKASH: ${myBkash}`, 20, 145);
+
+        doc.save(`${orderID}_Receipt.pdf`);
+        alert("Order Successful! Receipt Downloaded.");
+        document.getElementById('previewModal').style.display = 'none';
+    }
+</script>
+{% endblock %}

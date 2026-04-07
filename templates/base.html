@@ -5,20 +5,44 @@
     <meta charset="UTF-8">
     <title>FitAlgorithm Pro</title>
     <style>
+        /* CSS Variables for Light/Dark Mode Support */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --sidebar-bg: #5A2E14;
+            --sidebar-border: #734020;
+            --table-border: #ddd;
+            --table-head: #f2f2f2;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #f4f4f4;
+            --card-bg: #1e1e1e;
+            --sidebar-bg: #111111;
+            --sidebar-border: #333333;
+            --table-border: #444;
+            --table-head: #2c2c2c;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            background-color: #f4f7f6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .sidebar {
             width: 250px;
-            background-color: #5A2E14;
+            background-color: var(--sidebar-bg);
             color: white;
             height: 100vh;
             position: fixed;
             padding-top: 20px;
+            transition: background-color 0.3s;
         }
 
         .sidebar h2 {
@@ -32,11 +56,12 @@
             color: white;
             padding: 15px 20px;
             text-decoration: none;
-            border-bottom: 1px solid #734020;
+            border-bottom: 1px solid var(--sidebar-border);
             transition: 0.3s;
         }
 
-        .sidebar a:hover {
+        .sidebar a:hover,
+        .sidebar a.active {
             background-color: #8AB83A;
             padding-left: 30px;
         }
@@ -48,11 +73,13 @@
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            color: var(--text-color);
+            transition: background-color 0.3s;
         }
 
         .btn {
@@ -75,11 +102,11 @@
         td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--table-border);
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: var(--table-head);
         }
     </style>
 </head>
@@ -93,11 +120,38 @@
         <a href="/about">ℹ️ About Us</a>
         <a href="/contact">📞 Contact Us</a>
         <a href="/research">🎓 University Research</a>
+        <a href="/shop">🛒 Shop (Well Move)</a>
+        <a href="#" id="darkModeToggle">🌙 Dark Mode</a>
         <a href="/logout" style="color: #ffcccc;">🚪 Logout</a>
     </div>
+
     <div class="main-content">
         {% block content %}{% endblock %}
     </div>
+
+    <script>
+        const toggleBtn = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Check Local Storage for Theme
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            toggleBtn.innerHTML = '☀️ Light Mode';
+        }
+
+        toggleBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Light Mode';
+            } else {
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Dark Mode';
+            }
+        });
+    </script>
 </body>
 
-</html>                                                                                                                                       
+</html>

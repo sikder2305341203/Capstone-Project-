@@ -128,6 +128,14 @@ def research():
     if 'username' not in session: return redirect(url_for('home'))
     return render_template('research.html', username=session['username'])
 
+# ==========================================
+# NEW STORE ROUTE ADDED HERE
+# ==========================================
+@app.route('/shop')
+def shop():
+    if 'username' not in session: return redirect(url_for('home'))
+    return render_template('shop.html', username=session['username'])
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)

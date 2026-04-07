@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <h1>Welcome back, <span style="color: #8AB83A;">{{ username | upper }}</span>!</h1>
 </div>
@@ -63,7 +65,7 @@
     <div class="card" style="flex: 2; border-top: 5px solid #8AB83A; min-width: 300px;">
         <h3>🤖 AI Generated Dynamic Plan</h3>
         <div
-            style="display: flex; justify-content: space-around; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd;">
+            style="display: flex; justify-content: space-around; background: var(--bg-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--table-border);">
             <div style="text-align: center;">
                 <h4 style="margin: 0; color: #d35400; font-size: 28px;">{{ target_calories | int }}</h4>
                 <small style="font-weight: bold; color: #666;">Daily Kcal Limit</small>
@@ -80,19 +82,19 @@
 
         <h4>🍽️ Your Personalized Meal Routine:</h4>
         <div
-            style="background: #fff; padding: 15px; border-radius: 8px; border-left: 5px solid #27ae60; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px;">
+            style="background: var(--bg-color); padding: 15px; border-radius: 8px; border-left: 5px solid #27ae60; margin-bottom: 15px;">
             {% for meal_time, meal_desc in meals %}
-            <p style="margin: 8px 0; font-size: 15px;"><strong>{{ meal_time }}:</strong> <span style="color: #444;">{{
-                    meal_desc }}</span></p>
+            <p style="margin: 8px 0; font-size: 15px;"><strong>{{ meal_time }}:</strong> <span>{{ meal_desc }}</span>
+            </p>
             {% endfor %}
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc;">
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--table-border);">
                 <p style="margin: 0; color: #d35400; font-size: 15px;"><strong>💪 Activity Note ({{ activity
                         }}):</strong> {{ workout_meal }}</p>
             </div>
         </div>
 
         <h4>💡 Smart Tips Just For You:</h4>
-        <ul style="line-height: 1.8; color: #444; margin-top: 5px;">
+        <ul style="line-height: 1.8; margin-top: 5px;">
             <li>{{ tip1 }}</li>
             <li>{{ tip2 }}</li>
         </ul>
@@ -100,8 +102,7 @@
     </div>
 
     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-
-        <div class="card" style="flex: 1; border-top: 5px solid #2980b9; min-width: 300px; background-color: #f4f9f9;">
+        <div class="card" style="flex: 1; border-top: 5px solid #2980b9; min-width: 300px;">
             <h3>⚕️ Health Assessment</h3>
             <div style="margin-bottom: 15px;">
                 <p style="margin: 5px 0;"><strong>Your BMI:</strong> <span
@@ -110,7 +111,7 @@
                 </p>
                 <small style="color: #666;">Body Mass Index indicates if your weight is healthy for your height.</small>
             </div>
-            <hr style="border: 0.5px solid #bdc3c7;">
+            <hr style="border: 0.5px solid var(--table-border);">
             <div style="margin-top: 15px;">
                 <p style="margin: 5px 0;"><strong>Your BMR:</strong> <span
                         style="font-size: 24px; font-weight: bold; color: #8e44ad;">{{ bmr_exact }} kcal</span></p>
@@ -120,28 +121,78 @@
 
         <div class="card" style="flex: 2; border-top: 5px solid #d35400; min-width: 300px;">
             <h3>📈 Recent Progress Logs</h3>
+
             {% if history %}
+            <div style="background: var(--bg-color); padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                <canvas id="weightChart" height="80"></canvas>
+            </div>
+
             <table style="width: 100%; text-align: left; border-collapse: collapse;">
-                <tr style="background-color: #f2f2f2;">
-                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Date</th>
-                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Weight (KG)</th>
-                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Steps Walked</th>
-                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Calories Burned</th>
+                <tr style="background-color: var(--table-head);">
+                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Date</th>
+                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Weight (KG)</th>
+                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Steps Walked</th>
+                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Calories Burned</th>
                 </tr>
                 {% for row in history %}
                 <tr>
-                    <td style="padding: 12px; border-bottom: 1px solid #eee;">{{ row[2] }}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #eee;">{{ row[3] }}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #eee;">{{ row[4] }}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #eee; color: #d35400; font-weight: bold;">{{
-                        row[5] }} kcal</td>
+                    <td style="padding: 12px; border-bottom: 1px solid var(--table-border);">{{ row[2] }}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid var(--table-border);">{{ row[3] }}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid var(--table-border);">{{ row[4] }}</td>
+                    <td
+                        style="padding: 12px; border-bottom: 1px solid var(--table-border); color: #d35400; font-weight: bold;">
+                        {{ row[5] }} kcal</td>
                 </tr>
                 {% endfor %}
             </table>
+
+            <script>
+                const dates = [];
+                const weights = [];
+
+                // Loop over history data to pass it to JavaScript
+                {% for row in history %}
+                dates.push("{{ row[2] }}");
+                weights.push({{ row[3] }});
+                {% endfor %}
+
+                // Render Chart
+                const ctx = document.getElementById('weightChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates.reverse(), // Reverse to show chronological order left-to-right
+                        datasets: [{
+                            label: 'Weight (kg)',
+                            data: weights.reverse(),
+                            borderColor: '#d35400',
+                            backgroundColor: 'rgba(211, 84, 0, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: { color: 'rgba(200, 200, 200, 0.2)' }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            </script>
             {% else %}
             <p>No progress logged yet. <a href="/log_progress" style="color: #8AB83A; font-weight: bold;">Log your first
                     entry!</a></p>
             {% endif %}
         </div>
     </div>
-    {% endblock %}                                                                                                           
+    {% endblock %}

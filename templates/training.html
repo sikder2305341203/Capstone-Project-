@@ -1,10 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    /* Filter Button Styles */
+    .filter-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: var(--card-bg, #ffffff);
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .filter-btn {
+        background-color: #f4f4f4;
+        color: #333;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    .filter-btn:hover {
+        background-color: #e0e0e0;
+    }
+    .filter-btn.active {
+        background-color: #8AB83A;
+        color: white;
+        border-color: #8AB83A;
+    }
+    /* Category Badge */
+    .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 10px;
+        color: white;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+    .badge-cardio { background-color: #3498db; }
+    .badge-legs { background-color: #2ecc71; }
+    .badge-chest { background-color: #e74c3c; }
+    .badge-back { background-color: #9b59b6; }
+    .badge-core { background-color: #f1c40f; color: #333; }
+    .badge-arms { background-color: #e67e22; }
+</style>
+
 <div style="margin-bottom: 20px;">
     <h1>Your <span style="color: #27ae60;">Smart Training</span> Program</h1>
-    <p style="color: #666; font-size: 16px;">Personalized for <strong>{{ username }}</strong> based on Body Metrics &
-        Goal.</p>
+    <p style="color: #666; font-size: 16px;">Personalized for <strong>{{ username }}</strong> based on Body Metrics & Goal.</p>
 </div>
 
 {% set weight = profile[2] | float %}
@@ -14,17 +60,26 @@
 {% set height_m = height / 100 %}
 {% set bmi = (weight / (height_m * height_m)) | round(1) %}
 
-<div class="card" style="border-left: 5px solid #2980b9; background-color: #eef7fa;">
+<div class="card" style="border-left: 5px solid #2980b9; background-color: #eef7fa; color: #333;">
     <h4 style="margin: 0; color: #2980b9;">📋 AI Health Analysis:</h4>
-    <p style="margin: 5px 0; color: #444;">
+    <p style="margin: 5px 0;">
         Current BMI: <strong>{{ bmi }}</strong>.
         {% if bmi > 30 %}
-        <span style="color: #d35400;">(Condition: High Body Mass) - Providing <strong>Low-Impact Indoor
-                Activities</strong> to protect your joints.</span>
+        <span style="color: #d35400;">(Condition: High Body Mass) - Providing <strong>Low-Impact Indoor Activities</strong> to protect your joints.</span>
         {% else %}
         <span>(Condition: Fit/Active) - Providing <strong>High-Intensity</strong> routines for maximum results.</span>
         {% endif %}
     </p>
+</div>
+
+<div class="filter-container">
+    <strong style="line-height: 35px; margin-right: 10px;">Filter by Muscle:</strong>
+    <button class="filter-btn active" onclick="filterWorkout('all', this)">All</button>
+    <button class="filter-btn" onclick="filterWorkout('chest', this)">Chest & Push</button>
+    <button class="filter-btn" onclick="filterWorkout('legs', this)">Legs</button>
+    <button class="filter-btn" onclick="filterWorkout('back', this)">Back & Pull</button>
+    <button class="filter-btn" onclick="filterWorkout('core', this)">Core</button>
+    <button class="filter-btn" onclick="filterWorkout('cardio', this)">Cardio</button>
 </div>
 
 <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
@@ -34,19 +89,19 @@
         <h3>🚶‍♂️ Indoor Power Walking (No Equipment)</h3>
         <p style="color: #666; font-style: italic;">Perfect for small spaces</p>
         <ul style="line-height: 2;">
-            <li><strong>March in Place:</strong> 5 minutes (Warm-up)</li>
-            <li><strong>Side-to-Side Steps:</strong> 4 sets of 1 minute</li>
-            <li><strong>Indoor Brisk Walk:</strong> 15 minutes (Walk back & forth in room)</li>
-            <li><strong>Standing Knee Lifts:</strong> 3 sets of 20 reps (Slow & steady)</li>
+            <li class="ex-item" data-category="cardio"><strong>March in Place:</strong> 5 mins <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="cardio"><strong>Side-to-Side Steps:</strong> 4x 1 min <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="cardio"><strong>Indoor Brisk Walk:</strong> 15 mins <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="core"><strong>Standing Knee Lifts:</strong> 3x 20 reps <span class="badge badge-core">Core</span></li>
         </ul>
     </div>
     <div class="card" style="flex: 1; border-top: 5px solid #27ae60; min-width: 300px;">
         <h3>🧘‍♂️ Low-Impact Indoor Strength</h3>
         <ul style="line-height: 2;">
-            <li><strong>Wall Push-ups:</strong> 3 sets of 12 reps</li>
-            <li><strong>Chair Squats:</strong> 3 sets of 15 reps (Sit and stand from chair)</li>
-            <li><strong>Standing Calf Raises:</strong> 4 sets of 15 reps</li>
-            <li><strong>Seated Leg Extensions:</strong> 3 sets of 20 reps</li>
+            <li class="ex-item" data-category="chest"><strong>Wall Push-ups:</strong> 3x 12 reps <span class="badge badge-chest">Chest</span></li>
+            <li class="ex-item" data-category="legs"><strong>Chair Squats:</strong> 3x 15 reps <span class="badge badge-legs">Legs</span></li>
+            <li class="ex-item" data-category="legs"><strong>Standing Calf Raises:</strong> 4x 15 reps <span class="badge badge-legs">Legs</span></li>
+            <li class="ex-item" data-category="legs"><strong>Seated Leg Extensions:</strong> 3x 20 reps <span class="badge badge-legs">Legs</span></li>
         </ul>
     </div>
 
@@ -54,19 +109,19 @@
     <div class="card" style="flex: 1; border-top: 5px solid #e74c3c; min-width: 300px;">
         <h3>🔥 Home HIIT (Fat Burn)</h3>
         <ul style="line-height: 2;">
-            <li><strong>Burpees:</strong> 3 sets of 12 reps</li>
-            <li><strong>Mountain Climbers:</strong> 3 sets of 30 seconds</li>
-            <li><strong>Jumping Jacks:</strong> 4 sets of 45 seconds</li>
-            <li><strong>Plank to Push-up:</strong> 3 sets of 10 reps</li>
+            <li class="ex-item" data-category="cardio"><strong>Burpees:</strong> 3x 12 reps <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="core"><strong>Mountain Climbers:</strong> 3x 30 sec <span class="badge badge-core">Core</span></li>
+            <li class="ex-item" data-category="cardio"><strong>Jumping Jacks:</strong> 4x 45 sec <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="chest"><strong>Plank to Push-up:</strong> 3x 10 reps <span class="badge badge-chest">Chest</span></li>
         </ul>
     </div>
     <div class="card" style="flex: 1; border-top: 5px solid #f1c40f; min-width: 300px;">
         <h3>💪 Home Strength (Muscle Gain)</h3>
         <ul style="line-height: 2;">
-            <li><strong>Diamond Push-ups:</strong> 3 sets to failure</li>
-            <li><strong>Bulgarian Split Squats:</strong> 3 sets of 12 reps/leg</li>
-            <li><strong>Pike Push-ups:</strong> 3 sets of 10 reps</li>
-            <li><strong>Superman Hold:</strong> 3 sets of 30 seconds</li>
+            <li class="ex-item" data-category="chest"><strong>Diamond Push-ups:</strong> 3 sets to failure <span class="badge badge-chest">Chest</span></li>
+            <li class="ex-item" data-category="legs"><strong>Bulgarian Split Squats:</strong> 3x 12 reps/leg <span class="badge badge-legs">Legs</span></li>
+            <li class="ex-item" data-category="chest"><strong>Pike Push-ups:</strong> 3x 10 reps <span class="badge badge-chest">Chest</span></li>
+            <li class="ex-item" data-category="back"><strong>Superman Hold:</strong> 3x 30 sec <span class="badge badge-back">Back</span></li>
         </ul>
     </div>
 
@@ -74,31 +129,49 @@
     <div class="card" style="flex: 1; border-top: 5px solid #c0392b; min-width: 300px;">
         <h3>🦍 Gym Strength & Power</h3>
         <ul style="line-height: 2;">
-            <li><strong>Barbell Squats:</strong> 4 sets of 8-10 reps</li>
-            <li><strong>Bench Press:</strong> 4 sets of 10 reps</li>
-            <li><strong>Deadlifts:</strong> 3 sets of 6 reps</li>
-            <li><strong>Lat Pulldowns:</strong> 3 sets of 12 reps</li>
+            <li class="ex-item" data-category="legs"><strong>Barbell Squats:</strong> 4x 8-10 reps <span class="badge badge-legs">Legs</span></li>
+            <li class="ex-item" data-category="chest"><strong>Bench Press:</strong> 4x 10 reps <span class="badge badge-chest">Chest</span></li>
+            <li class="ex-item" data-category="back"><strong>Deadlifts:</strong> 3x 6 reps <span class="badge badge-back">Back</span></li>
+            <li class="ex-item" data-category="back"><strong>Lat Pulldowns:</strong> 3x 12 reps <span class="badge badge-back">Back</span></li>
         </ul>
     </div>
     <div class="card" style="flex: 1; border-top: 5px solid #2980b9; min-width: 300px;">
         <h3>🏃‍♂️ Gym Cardio & Machines</h3>
         <ul style="line-height: 2;">
-            <li><strong>Incline Treadmill Walk:</strong> 15 minutes (Level 5-8)</li>
-            <li><strong>Elliptical Trainer:</strong> 10 minutes (High resistance)</li>
-            <li><strong>Leg Press Machine:</strong> 3 sets of 15 reps</li>
-            <li><strong>Bicep Curls (Cable):</strong> 3 sets of 12 reps</li>
+            <li class="ex-item" data-category="cardio"><strong>Incline Treadmill Walk:</strong> 15 mins <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="cardio"><strong>Elliptical Trainer:</strong> 10 mins <span class="badge badge-cardio">Cardio</span></li>
+            <li class="ex-item" data-category="legs"><strong>Leg Press Machine:</strong> 3x 15 reps <span class="badge badge-legs">Legs</span></li>
+            <li class="ex-item" data-category="arms"><strong>Bicep Curls (Cable):</strong> 3x 12 reps <span class="badge badge-arms">Arms</span></li>
         </ul>
     </div>
     {% endif %}
 
 </div>
 
-<div class="card" style="border-top: 5px solid #e67e22; margin-top: 20px; background-color: #fff9f0;">
+<div class="card" style="border-top: 5px solid #e67e22; margin-top: 20px; background-color: #fff9f0; color: #333;">
     <h3 style="color: #d35400;">👟 Daily Walking Challenge:</h3>
-    <p style="font-size: 16px; color: #444;">
+    <p style="font-size: 16px;">
         Regardless of your workout, aim for <strong>7,000 to 10,000 steps</strong> today.
-        If you are indoors, try 20 minutes of <strong>Indoor Pacing</strong> while listening to a podcast or your
-        favorite anime soundtrack!
+        If you are indoors, try 20 minutes of <strong>Indoor Pacing</strong> while listening to a podcast or your favorite anime soundtrack!
     </p>
 </div>
-{% endblock %}                                                                                                           
+
+<script>
+    function filterWorkout(category, btnElement) {
+        // Update active button styling
+        let buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        // Filter exercise items
+        let items = document.querySelectorAll('.ex-item');
+        items.forEach(item => {
+            if (category === 'all' || item.getAttribute('data-category') === category) {
+                item.style.display = 'list-item';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -2,75 +2,189 @@
 <html lang="en">
 
 <head>
-    <title>Setup Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitAlgorithm - Setup Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Premium Gym Background Image with Dark Overlay (লগইন পেজের মত) */
         body {
-            font-family: 'Georgia', serif;
-            text-align: center;
-            background-color: #F3EFE3;
-            color: #5A2E14;
-            padding-top: 50px;
+            background: linear-gradient(rgba(15, 15, 15, 0.75), rgba(15, 15, 15, 0.85)),
+                url('https://t3.ftcdn.net/jpg/02/56/17/92/360_F_256179223_FDWWNhqs8afJPs2W0iUUptiFXte4K8gP.jpg') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            padding: 40px 20px;
+            
         }
 
-        .box {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 40px;
-            width: 400px;
-            margin: auto;
-            border-radius: 15px;
-            border: 2px dashed #8AB83A;
-        }
-
-        input,
-        select {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #c8bca7;
-            border-radius: 10px;
-        }
-
-        .btn {
-            background-color: #8AB83A;
-            color: white;
-            padding: 12px 30px;
-            border: none;
+      
+        .profile-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 40px;
             border-radius: 20px;
-            font-size: 18px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: 0.3s;
+            background: #fafafa;
+            color: #333;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #000000;
+            background: #fff;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Gradient completely changed to Black/Dark Grey */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2b2b2b, #000000);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 15px;
+            transition: 0.3s;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
         }
     </style>
 </head>
 
 <body>
-    <div class="box">
-        <h2>Tell us about yourself</h2>
+
+    <div class="profile-wrapper">
+        <div class="title">Tell us about yourself</div>
+        <div class="subtitle">Personalize your FitAlgorithm journey</div>
+
         <form method="POST">
-            <input type="number" name="age" placeholder="Age" required>
-            <input type="number" step="0.1" name="weight" placeholder="Weight (kg)" required>
-            <input type="number" step="0.1" name="height" placeholder="Height (cm)" required>
-            <select name="goal" required>
-                <option value="" disabled selected>Select Your Goal</option>
-                <option value="Weight Loss">Weight Loss</option>
-                <option value="Weight Gain">Weight Gain</option>
-                <option value="Maintenance">Maintenance</option>
-            </select>
-            <select name="workout_location" required>
-                <option value="" disabled selected>Where will you workout?</option>
-                <option value="Home">Home (No Equipment)</option>
-                <option value="Gym">Gym (Weights & Machines)</option>
-            </select>
-            <select name="activity" required>
-                <option value="" disabled selected>Favorite Activity</option>
-                <option value="Walking">Walking</option>
-                <option value="Running">Running</option>
-                <option value="Weightlifting">Weightlifting</option>
-                <option value="Yoga">Yoga</option>
-            </select>
-            <button type="submit" class="btn">Save Profile</button>
+            <div class="input-group">
+                <label>Age</label>
+                <input type="number" name="age" placeholder="Enter your age" required>
+            </div>
+
+            <div class="input-group">
+                <label>Weight (kg)</label>
+                <input type="number" step="0.1" name="weight" placeholder="Enter your weight" required>
+            </div>
+
+            <div class="input-group">
+                <label>Height (cm)</label>
+                <input type="number" step="0.1" name="height" placeholder="Enter your height" required>
+            </div>
+
+            <div class="input-group">
+                <label>Your Goal</label>
+                <select name="goal" required>
+                    <option value="" disabled selected>Select Your Goal</option>
+                    <option value="Weight Loss">Weight Loss</option>
+                    <option value="Weight Gain">Weight Gain</option>
+                    <option value="Maintenance">Maintenance</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Workout Location</label>
+                <select name="workout_location" required>
+                    <option value="" disabled selected>Where will you workout?</option>
+                    <option value="Home">Home (No Equipment)</option>
+                    <option value="Gym">Gym (Weights & Machines)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Favorite Activity</label>
+                <select name="activity" required>
+                    <option value="" disabled selected>Favorite Activity</option>
+                    <option value="Walking">Walking</option>
+                    <option value="Running">Running</option>
+                    <option value="Weightlifting">Weightlifting</option>
+                    <option value="Yoga">Yoga</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn">SAVE PROFILE</button>
         </form>
     </div>
+
 </body>
 
 </html>
