@@ -8,11 +8,12 @@
     .shop-header {
         text-align: center;
         margin-bottom: 30px;
-        padding: 30px;
-        background: linear-gradient(135deg, #5A2E14, #2c160a);
+        padding: 40px;
+        /* Sleek Midnight Navy Gradient */
+        background: linear-gradient(135deg, #213B58, #2E5074);
         color: white;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
 
     .product-grid {
@@ -27,14 +28,15 @@
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         text-align: center;
-        border-top: 5px solid #8AB83A;
-        transition: 0.3s;
+        /* Premium Deep Bronze Top Border */
+        border-top: 5px solid #B78768;
+        transition: 0.3s ease;
         position: relative;
     }
 
     .product-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
     .product-img-styled {
@@ -49,20 +51,23 @@
     .product-title {
         font-size: 19px;
         font-weight: bold;
-        color: var(--text-color, #333);
+        color: #333333;
+        /* Dark Charcoal for clean text */
         margin-bottom: 10px;
     }
 
     .product-price {
         font-size: 24px;
-        color: #d35400;
+        /* Premium Bronze for Price */
+        color: #B78768;
         font-weight: bold;
         margin-bottom: 18px;
     }
 
-    /* BUY NOW Button Style */
+    /* Standard BUY NOW Button Style */
     .btn-buy {
-        background-color: #5A2E14;
+        /* Brand Midnight Navy */
+        background-color: #213B58;
         color: white;
         border: none;
         padding: 12px;
@@ -70,28 +75,42 @@
         cursor: pointer;
         width: 100%;
         font-weight: bold;
-        transition: 0.3s;
+        transition: 0.3s ease;
         font-size: 16px;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
 
     .btn-buy:hover {
-        background-color: #8AB83A;
+        /* Hover to Deep Bronze Accent */
+        background-color: #B78768;
         transform: scale(1.02);
     }
 
+    /* Tag base styling */
     .tag {
         position: absolute;
         top: 10px;
         left: 10px;
-        background-color: #e74c3c;
         color: white;
         padding: 5px 12px;
         font-size: 12px;
         font-weight: bold;
         border-radius: 20px;
         z-index: 10;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Specific Tag Styles */
+    .tag-bestseller {
+        background-color: #D4AF37;
+        /* Deep Gold */
+    }
+
+    .tag-new-arrival {
+        background-color: #1E847F;
+        /* Sleek Teal Green */
     }
 
     /* --- Modal & Form Styles --- */
@@ -103,18 +122,19 @@
         top: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.85);
+        /* Slightly darker for better focus */
         overflow-y: auto;
     }
 
     .modal-content {
-        background: #fff;
+        background: #ffffff;
         margin: 2% auto;
         padding: 25px;
         width: 500px;
         border-radius: 15px;
-        color: #333;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+        color: #333333;
+        box-shadow: 0 5px 30px rgba(0, 0, 0, 0.6);
     }
 
     .form-group {
@@ -126,6 +146,7 @@
         display: block;
         margin-bottom: 5px;
         font-weight: bold;
+        color: #444;
     }
 
     .form-group input,
@@ -135,15 +156,25 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #B78768;
+        /* Bronze focus */
+        outline: none;
     }
 
     .delivery-partner {
         background: #f4f4f4;
         padding: 12px;
         border-radius: 8px;
-        border-left: 5px solid #5A2E14;
+        /* Midnight Navy Left Border */
+        border-left: 5px solid #213B58;
         margin: 15px 0;
         font-size: 14px;
+        color: #555;
     }
 
     .payment-methods {
@@ -160,13 +191,15 @@
         cursor: pointer;
         flex: 1;
         text-align: center;
-        background: #fff;
+        background: #ffffff;
         transition: 0.3s;
     }
 
     .pay-btn.active {
-        border-color: #8AB83A;
-        background: #f0f9eb;
+        border-color: #B78768;
+        /* Bronze border for active */
+        background: #FAF6F2;
+        /* Subtl Cream background */
     }
 
     .pay-btn img {
@@ -177,12 +210,14 @@
 
     /* --- Receipt Preview --- */
     #receiptPreview {
-        background: #fafafa;
-        border: 2px dashed #bbb;
+        background: #ffffff;
+        border: 2px dashed #B78768;
+        /* Bronze dashed border */
         padding: 20px;
         font-family: 'Courier New', monospace;
         font-size: 14px;
-        color: #000;
+        color: #213B58;
+        /* Clean Midnight Navy text */
         margin: 20px 0;
         border-radius: 5px;
         line-height: 1.5;
@@ -190,8 +225,8 @@
 </style>
 
 <div class="shop-header">
-    <h1>🛒 <span style="color: #8AB83A;">Well Move</span> Store</h1>
-    <p>Official Activewear by FitAlgorithm</p>
+    <h1>🛒 <span style="color: #B78768;">Well Move</span> Store</h1>
+    <p style="color: #cccccc;">Official Activewear by FitAlgorithm</p>
 </div>
 
 <div class="product-grid">
@@ -203,7 +238,7 @@
     </div>
 
     <div class="product-card">
-        <span class="tag">Bestseller</span>
+        <span class="tag tag-bestseller">Bestseller</span>
         <img src="{{ url_for('static', filename='images/tshirt.webp') }}" class="product-img-styled">
         <div class="product-title">Well Move Oversized Pump Cover</div>
         <div class="product-price">৳ 1,500</div>
@@ -218,7 +253,7 @@
     </div>
 
     <div class="product-card">
-        <span class="tag" style="background-color: #2980b9;">New Arrival</span>
+        <span class="tag tag-new-arrival">New Arrival</span>
         <img src="{{ url_for('static', filename='images/shoe.webp') }}" class="product-img-styled">
         <div class="product-title">Well Move Pro-Lift Squat Shoes</div>
         <div class="product-price">৳ 3,000</div>
@@ -228,7 +263,7 @@
 
 <div id="checkoutModal" class="modal">
     <div class="modal-content">
-        <h2 style="margin-top:0; color:#5A2E14; text-align:center;">Quick Checkout</h2>
+        <h2 style="margin-top:0; color:#213B58; text-align:center;">Quick Checkout</h2>
         <form id="orderForm">
             <div style="display:flex; gap:10px;">
                 <div class="form-group" style="flex:1;"><label>Size</label><select id="sizeSelect">
@@ -251,28 +286,28 @@
                     required></div>
 
             <div class="delivery-partner">
-                <strong>Delivery Partner: <span style="color: #d35400;">Quick Link</span></strong><br>
+                <strong>Delivery Partner: <span style="color: #B78768;">Quick Link</span></strong><br>
                 <small><i>"Your Product, Our Responsibility"</i></small>
             </div>
 
-            <label><strong>Payment Method (SSLCommerz)</strong></label>
+            <label style="color: #213B58;"><strong>Payment Method (SSLCommerz)</strong></label>
             <div class="payment-methods">
                 <div class="pay-btn" onclick="setPayment('bkash', this)"><img
                         src="https://logos-download.com/wp-content/uploads/2022/01/BKash_Logo.png"><small>bKash</small>
                 </div>
                 <div class="pay-btn" onclick="setPayment('nagad', this)"><img
-                        src="https://www.tbsnews.net/sites/default/files/styles/infograph/public/images/2021/04/05/nagad_logo.png"><small>Nagad</small>
+                        src="{{ url_for('static', filename='images/nagad.webp') }}" alt="Nagad"><small>Nagad</small>
                 </div>
                 <div class="pay-btn" onclick="setPayment('visa', this)"><img
-                        src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg"><small>Visa</small>
+                        src="{{ url_for('static', filename='images/visa.png') }}" alt="Visa"><small>Visa</small>
                 </div>
             </div>
 
-            <div style="text-align:center; font-size:22px; font-weight:bold; margin:15px 0; color:#27ae60;">Total:
+            <div style="text-align:center; font-size:22px; font-weight:bold; margin:15px 0; color:#213B58;">Total:
                 ৳<span id="totalDisplay">0</span></div>
-            <button type="button" class="btn-buy" style="background:#27ae60;" onclick="showPreview()">Preview
+            <button type="button" class="btn-buy" style="background:#213B58;" onclick="showPreview()">Preview
                 Receipt</button>
-            <button type="button" class="btn-buy" style="background:#e74c3c; margin-top:8px;"
+            <button type="button" class="btn-buy" style="background:#9C3632; margin-top:8px;"
                 onclick="closeCheckout()">Cancel</button>
         </form>
     </div>
@@ -280,11 +315,11 @@
 
 <div id="previewModal" class="modal">
     <div class="modal-content" style="width:550px;">
-        <h2 style="text-align:center; color:#5A2E14;">Order Summary Preview</h2>
+        <h2 style="text-align:center; color:#213B58;">Order Summary Preview</h2>
         <div id="receiptPreview"></div>
-        <button class="btn-buy" style="background:#27ae60;" onclick="confirmAndDownload()">Pay & Download
+        <button class="btn-buy" style="background:#213B58;" onclick="confirmAndDownload()">Pay & Download
             Receipt</button>
-        <button class="btn-buy" style="background:#5A2E14; margin-top:8px;" onclick="backToCheckout()">Back to
+        <button class="btn-buy" style="background:#B78768; margin-top:8px;" onclick="backToCheckout()">Back to
             Edit</button>
     </div>
 </div>
@@ -311,6 +346,7 @@
         const total = document.getElementById('totalDisplay').innerText;
         const size = document.getElementById('sizeSelect').value;
 
+        // Clean receipt text in Midnight Navy
         let previewHTML = `
             <div style="text-align:center;"><strong>WELL MOVE STORE</strong><br><small>Your Product, Our Responsibility</small></div>
             <hr>
@@ -319,9 +355,9 @@
             <strong>Customer:</strong> ${name}<br>
             <strong>Delivery:</strong> Quick Link<br>
             <hr>
-            <div style="font-size:18px; text-align:center; color:#27ae60;"><strong>Amount: ৳${total}</strong></div>
+            <div style="font-size:18px; text-align:center; color:#213B58;"><strong>Amount: ৳${total}</strong></div>
             <hr>
-            <div style="color:#d35400; text-align:center;">Pay to bKash: <strong>${myBkash}</strong></div>
+            <div style="color:#B78768; text-align:center;">Pay to bKash: <strong>${myBkash}</strong></div>
         `;
         document.getElementById('receiptPreview').innerHTML = previewHTML;
         document.getElementById('checkoutModal').style.display = 'none';
@@ -336,7 +372,8 @@
         const phone = document.getElementById('custPhone').value;
         const total = document.getElementById('totalDisplay').innerText;
 
-        doc.setFontSize(22); doc.setTextColor(90, 46, 20);
+        // Clean text colors for PDF Receipt
+        doc.setFontSize(22); doc.setTextColor(33, 59, 88); // Midnight Navy (main text)
         doc.text("WELL MOVE OFFICIAL RECEIPT", 105, 20, { align: "center" });
 
         doc.setFontSize(12); doc.setTextColor(0);
@@ -352,11 +389,12 @@
         doc.setFont(undefined, 'bold'); doc.text("ORDER SUMMARY:", 20, 95);
         doc.setFont(undefined, 'normal');
         doc.text(`Product: ${selectedItemName}`, 20, 103);
-        doc.setFontSize(16); doc.setTextColor(39, 174, 96);
+        // Rich Sea Green for GRAND TOTAL
+        doc.setFontSize(16); doc.setTextColor(34, 139, 34);
         doc.text(`GRAND TOTAL: BDT ${total}`, 20, 115);
 
         doc.line(20, 125, 190, 125);
-        doc.setFontSize(12); doc.setTextColor(211, 84, 0);
+        doc.setFontSize(12); doc.setTextColor(160, 82, 45); // Sienna brand copper
         doc.text(`PAYMENT: SSLCommerz (${selectedMethod.toUpperCase()})`, 20, 135);
         doc.text(`PLEASE PAY TO BKASH: ${myBkash}`, 20, 145);
 
