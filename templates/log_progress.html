@@ -3,24 +3,33 @@
 {% block content %}
 <h1>Log Your Daily Progress</h1>
 
-<div class="card" style="max-width: 500px; border-top: 5px solid #8AB83A;">
-    <form method="POST">
-        <div style="margin-bottom: 15px;">
-            <label>Today's Weight (KG):</label><br>
-            <input type="number" step="0.1" name="weight" required style="width: 100%; padding: 10px; margin-top: 5px;">
-        </div>
+<form method="POST" onsubmit="return validateForm()">
 
-        <div style="margin-bottom: 15px;">
-            <label>Steps Walked Today:</label><br>
-            <input type="number" name="steps" required style="width: 100%; padding: 10px; margin-top: 5px;">
-        </div>
+    <p style="color: #888; font-size: 14px;">
+        📅 Today: <span id="todayDate"></span>
+    </p>
 
-        <div style="margin-bottom: 15px;">
-            <label>Calories Burned (Active):</label><br>
-            <input type="number" name="calories" required style="width: 100%; padding: 10px; margin-top: 5px;">
-        </div>
+    <div style="margin-bottom: 15px;">
+        <label>Today's Weight (KG):</label><br>
+        <input type="number" step="0.1" id="weight" name="weight" required 
+        style="width: 100%; padding: 10px; margin-top: 5px;">
+    </div>
 
-        <button type="submit" class="btn" style="width: 100%; font-size: 16px;">Save Progress</button>
-    </form>
-</div>
-{% endblock %}
+    <div style="margin-bottom: 15px;">
+        <label>Steps Walked Today:</label><br>
+        <input type="number" id="steps" name="steps" required 
+        style="width: 100%; padding: 10px; margin-top: 5px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>Calories Burned (Active):</label><br>
+        <input type="number" id="calories" name="calories" required 
+        style="width: 100%; padding: 10px; margin-top: 5px;">
+    </div>
+
+    <button type="submit" class="btn" style="width: 100%; font-size: 16px;">
+        Save Progress
+    </button>
+
+    <div id="feedbackMsg" style="margin-top: 15px; font-weight: bold;"></div>
+</form>
