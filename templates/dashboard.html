@@ -1,198 +1,65 @@
-{% extends "base.html" %}
+<script>
+    const dates = [];
+    const weights = [];
 
-{% block content %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% for row in history %}
+    dates.push("{{ row[2] }}");
+    weights.push({{ row[3] }});
+    {% endfor %}
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h1>Welcome back, <span style="color: #8AB83A;">{{ username | upper }}</span>!</h1>
-</div>
+    // Detect trend
+    let trend = "";
+    if (weights.length >= 2) {
+        if (weights[weights.length - 1] > weights[0]) {
+            trend = "📈 Weight Increasing";
+        } else if (weights[weights.length - 1] < weights[0]) {
+            trend = "📉 Weight Decreasing";
+        } else {
+            trend = "➡️ Stable";
+        }
+    }
 
-{% set age = profile[1] | int %}
-{% set weight = profile[2] | float %}
-{% set height = profile[3] | float %}
-{% set goal = profile[4] %}
-{% set activity = profile[5] %}
+    // Show trend above chart
+    const trendDiv = document.createElement("div");
+    trendDiv.innerHTML = `<strong>${trend}</strong>`;
+    trendDiv.style.marginBottom = "10px";
+    trendDiv.style.color = "#8AB83A";
+    document.getElementById("weightChart").parentNode.prepend(trendDiv);
 
-{% set height_m = height / 100 %}
-{% set bmi = (weight / (height_m * height_m)) | round(1) %}
+    // BMI constant line
+    const bmiLine = Array(weights.length).fill({{ bmi }});
 
-{% if bmi < 18.5 %} {% set bmi_status="Underweight ⚠️" %} {% set bmi_color="#f39c12" %} {% elif bmi < 25 %} {% set
-    bmi_status="Normal Weight ✅" %} {% set bmi_color="#27ae60" %} {% elif bmi < 30 %} {% set bmi_status="Overweight ⚠️"
-    %} {% set bmi_color="#e67e22" %} {% else %} {% set bmi_status="Obese ❌" %} {% set bmi_color="#c0392b" %} {% endif %}
-    {% set bmr_exact=((10 * weight) + (6.25 * height) - (5 * age) + 5) | int %} {% set activity_mult=1.2 %} {% if
-    activity=='Running' %}{% set activity_mult=1.5 %}{% endif %} {% if activity=='Weightlifting' %}{% set
-    activity_mult=1.4 %}{% endif %} {% if activity=='Yoga' %}{% set activity_mult=1.3 %}{% endif %} {% set
-    tdee=bmr_exact * activity_mult %} {% set target_calories=tdee %} {% set protein=weight * 1.6 %} {% set
-    carb_type="Moderate Carb" %} {% set tip1="Maintain your current diet and activity consistency." %} {% set
-    tip2="Focus on 7-8 hours of sleep for optimal recovery." %} {% set meals=[] %} {% if goal=='Weight Loss' %} {% set
-    target_calories=tdee - 500 %} {% set protein=weight * 2.2 %} {% set carb_type="Low Carb" %} {% set
-    tip1="Drink 1 glass of water before every meal to feel full naturally." %} {% set
-    tip2="Try to hit 10,000 steps daily to boost your fat-burning engine." %} {% set meals=[ ('🌅 Breakfast (8:30
-    AM)', '2 Boiled eggs, 1 Apple, and Green Tea (No sugar)' ), ('🍛 Lunch (1:30
-    PM)', '1 cup brown rice, 150g grilled chicken/fish, large mixed salad' ), ('☕ Evening Snack (5:00
-    PM)', 'Handful of almonds & Green tea' ), ('🍲 Dinner (8:00
-    PM)', 'Vegetable soup, 100g chicken, and steamed veggies (Keep it light)' ) ] %} {% elif goal=='Weight Gain' %} {%
-    set target_calories=tdee + 500 %} {% set protein=weight * 1.8 %} {% set carb_type="High Carb" %} {% set
-    tip1="Eat every 3-4 hours to ensure you stay in a caloric surplus." %} {% set
-    tip2="Include calorie-dense foods like peanut butter, nuts, and olive oil." %} {% set meals=[ ('🌅 Breakfast (8:00
-    AM)', '4 scrambled eggs, 2 slices whole wheat toast, Banana & Peanut Butter smoothie' ), ('🥪 Mid-Morning (11:00
-    AM)', '1 large bowl of oats with whole milk, honey, and nuts' ), ('🍛 Lunch (2:00
-    PM)', '2.5 cups rice, 200g beef/chicken, thick dal, and mixed vegetables' ), ('☕ Evening Snack (5:30
-    PM)', '2 Peanut butter sandwiches, 1 glass of whole milk' ), ('🍲 Dinner (9:00
-    PM)', '2 cups rice, 150g fish/meat, and veggies' ) ] %} {% else %} {% set meals=[ ('🌅 Breakfast (8:30
-    AM)', '2 eggs, 2 rotis, 1 piece of seasonal fruit' ), ('🍛 Lunch (2:00
-    PM)', '1.5 cups rice, 150g chicken/fish, vegetables' ), ('☕ Evening Snack (5:30
-    PM)', 'Tea/Coffee with light snacks (e.g., biscuits)' ), ('🍲 Dinner (8:30
-    PM)', '1.5 cups rice/3 rotis, 100g protein, veggies' ) ] %} {% endif %} {% set
-    workout_meal="Stay hydrated and take a 10-minute walk after meals." %} {% if activity=='Weightlifting' %} {% set
-    workout_meal="Post-workout: 1 scoop Whey Protein or 4 egg whites immediately after training." %} {% elif
-    activity=='Running' %} {% set workout_meal="Pre-workout: 1 Banana and a black coffee 30 mins before running." %} {%
-    elif activity=='Yoga' %} {% set workout_meal="Post-workout: Green tea and a small bowl of fresh fruit." %} {% endif
-    %} {% set water_intake=(weight * 0.035) | round(1) %} <div
-    style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+    const ctx = document.getElementById('weightChart').getContext('2d');
 
-    <div class="card" style="flex: 1; border-top: 5px solid #5A2E14; min-width: 300px;">
-        <h3>👤 Your Body Metrics</h3>
-        <p><strong>Age:</strong> {{ age }} Years</p>
-        <p><strong>Target Goal:</strong> <span style="color: #d35400; font-weight: bold;">{{ goal }}</span></p>
-        <p><strong>Main Activity:</strong> {{ activity }}</p>
-        <p><strong>Weight:</strong> {{ weight }} kg | <strong>Height:</strong> {{ height }} cm</p>
-        <hr style="border: 0.5px solid #eee;">
-        <p><strong>💧 Daily Water Need:</strong> <span style="color: #2980b9; font-size: 18px; font-weight: bold;">{{
-                water_intake }} Liters</span></p>
-    </div>
-
-    <div class="card" style="flex: 2; border-top: 5px solid #8AB83A; min-width: 300px;">
-        <h3>🤖 AI Generated Dynamic Plan</h3>
-        <div
-            style="display: flex; justify-content: space-around; background: var(--bg-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--table-border);">
-            <div style="text-align: center;">
-                <h4 style="margin: 0; color: #d35400; font-size: 28px;">{{ target_calories | int }}</h4>
-                <small style="font-weight: bold; color: #666;">Daily Kcal Limit</small>
-            </div>
-            <div style="text-align: center;">
-                <h4 style="margin: 0; color: #27ae60; font-size: 28px;">{{ protein | int }}g</h4>
-                <small style="font-weight: bold; color: #666;">Daily Protein</small>
-            </div>
-            <div style="text-align: center;">
-                <h4 style="margin: 0; color: #2980b9; font-size: 28px;">{{ carb_type }}</h4>
-                <small style="font-weight: bold; color: #666;">Diet Type</small>
-            </div>
-        </div>
-
-        <h4>🍽️ Your Personalized Meal Routine:</h4>
-        <div
-            style="background: var(--bg-color); padding: 15px; border-radius: 8px; border-left: 5px solid #27ae60; margin-bottom: 15px;">
-            {% for meal_time, meal_desc in meals %}
-            <p style="margin: 8px 0; font-size: 15px;"><strong>{{ meal_time }}:</strong> <span>{{ meal_desc }}</span>
-            </p>
-            {% endfor %}
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--table-border);">
-                <p style="margin: 0; color: #d35400; font-size: 15px;"><strong>💪 Activity Note ({{ activity
-                        }}):</strong> {{ workout_meal }}</p>
-            </div>
-        </div>
-
-        <h4>💡 Smart Tips Just For You:</h4>
-        <ul style="line-height: 1.8; margin-top: 5px;">
-            <li>{{ tip1 }}</li>
-            <li>{{ tip2 }}</li>
-        </ul>
-    </div>
-    </div>
-
-    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-        <div class="card" style="flex: 1; border-top: 5px solid #2980b9; min-width: 300px;">
-            <h3>⚕️ Health Assessment</h3>
-            <div style="margin-bottom: 15px;">
-                <p style="margin: 5px 0;"><strong>Your BMI:</strong> <span
-                        style="font-size: 28px; font-weight: bold; color: {{ bmi_color }};">{{ bmi }}</span></p>
-                <p style="margin: 5px 0; font-size: 18px; font-weight: bold; color: {{ bmi_color }};">{{ bmi_status }}
-                </p>
-                <small style="color: #666;">Body Mass Index indicates if your weight is healthy for your height.</small>
-            </div>
-            <hr style="border: 0.5px solid var(--table-border);">
-            <div style="margin-top: 15px;">
-                <p style="margin: 5px 0;"><strong>Your BMR:</strong> <span
-                        style="font-size: 24px; font-weight: bold; color: #8e44ad;">{{ bmr_exact }} kcal</span></p>
-                <small style="color: #666;">Basal Metabolic Rate is the calories your body burns at rest.</small>
-            </div>
-        </div>
-
-        <div class="card" style="flex: 2; border-top: 5px solid #d35400; min-width: 300px;">
-            <h3>📈 Recent Progress Logs</h3>
-
-            {% if history %}
-            <div style="background: var(--bg-color); padding: 10px; border-radius: 8px; margin-bottom: 20px;">
-                <canvas id="weightChart" height="80"></canvas>
-            </div>
-
-            <table style="width: 100%; text-align: left; border-collapse: collapse;">
-                <tr style="background-color: var(--table-head);">
-                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Date</th>
-                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Weight (KG)</th>
-                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Steps Walked</th>
-                    <th style="padding: 12px; border-bottom: 1px solid var(--table-border);">Calories Burned</th>
-                </tr>
-                {% for row in history %}
-                <tr>
-                    <td style="padding: 12px; border-bottom: 1px solid var(--table-border);">{{ row[2] }}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid var(--table-border);">{{ row[3] }}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid var(--table-border);">{{ row[4] }}</td>
-                    <td
-                        style="padding: 12px; border-bottom: 1px solid var(--table-border); color: #d35400; font-weight: bold;">
-                        {{ row[5] }} kcal</td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            <script>
-                const dates = [];
-                const weights = [];
-
-                // Loop over history data to pass it to JavaScript
-                {% for row in history %}
-                dates.push("{{ row[2] }}");
-                weights.push({{ row[3] }});
-                {% endfor %}
-
-                // Render Chart
-                const ctx = document.getElementById('weightChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dates.reverse(), // Reverse to show chronological order left-to-right
-                        datasets: [{
-                            label: 'Weight (kg)',
-                            data: weights.reverse(),
-                            borderColor: '#d35400',
-                            backgroundColor: 'rgba(211, 84, 0, 0.2)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                grid: { color: 'rgba(200, 200, 200, 0.2)' }
-                            },
-                            x: {
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            </script>
-            {% else %}
-            <p>No progress logged yet. <a href="/log_progress" style="color: #8AB83A; font-weight: bold;">Log your first
-                    entry!</a></p>
-            {% endif %}
-        </div>
-    </div>
-    {% endblock %}
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates.reverse(),
+            datasets: [
+                {
+                    label: 'Weight (kg)',
+                    data: weights.reverse(),
+                    borderColor: '#d35400',
+                    backgroundColor: 'rgba(211, 84, 0, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'BMI Level',
+                    data: bmiLine,
+                    borderColor: '#2980b9',
+                    borderDash: [5,5],
+                    borderWidth: 2,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            }
+        }
+    });
+</script>
