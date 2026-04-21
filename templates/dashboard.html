@@ -112,9 +112,9 @@
 
         <h4>🍽️ Your Personalized Meal Routine:</h4>
         <div style="background: var(--bg-color); padding: 15px; border-radius: 8px; border-left: 5px solid #27ae60; margin-bottom: 15px;">
-            {% for meal_time, meal_desc in meals %}
-            <p style="margin: 8px 0; font-size: 15px;"><strong>{{ meal_time }}:</strong> <span>{{ meal_desc }}</span></p>
-            {% endfor %}
+           {% for meal_time, meal_desc in meals %}
+    <p style="margin: 8px 0; font-size: 15px;"><strong>{{ meal_time }}:</strong> <span>{{ meal_desc }}</span></p>
+{% endfor %}
             <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed var(--table-border);">
                 <p style="margin: 0; color: #d35400; font-size: 15px;"><strong>💪 Activity Note ({{ activity }}):</strong> {{ workout_meal }}</p>
             </div>
