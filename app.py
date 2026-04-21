@@ -11,6 +11,7 @@ def init_db():
     c.execute('''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)''')
     c.execute('''CREATE TABLE IF NOT EXISTS profiles (username TEXT PRIMARY KEY, age INTEGER, weight REAL, height REAL, goal TEXT, activity TEXT, workout_location TEXT)''')
     c.execute('''CREATE TABLE IF NOT EXISTS progress (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, record_date TEXT, current_weight REAL, steps INTEGER, calories INTEGER)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS water_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, amount INTEGER, log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
     conn.commit()
     conn.close()
 
@@ -70,20 +71,25 @@ def setup_profile():
 
 @app.route('/dashboard')
 def dashboard():
-    if 'username' not in session: return redirect(url_for('home'))
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM profiles WHERE username=?", (session['username'],))
+    
+    c.execute("SELECT * FROM profiles WHERE username = ?", (session['username'],))
     profile = c.fetchone()
-    c.execute("SELECT * FROM progress WHERE username=? ORDER BY record_date DESC LIMIT 5", (session['username'],))
-    history = c.fetchall()
+    
+    c.execute("SELECT SUM(amount) FROM water_logs WHERE username = ? AND date(log_time) = date('now')", (session['username'],))
+    total_consumed = c.fetchone()[0] or 0
+    
     conn.close()
-    
-    # Fail-safe: Jodi profile na thake ba purano database hoy jekhane location nai
-    if not profile or len(profile) < 7: 
+
+    if not profile or len(profile) < 7:
         return redirect(url_for('setup_profile'))
-    
-    return render_template('dashboard.html', username=session['username'], profile=profile, history=history)
+        
+    return render_template('dashboard.html', username=session['username'], profile=profile, total_consumed=total_consumed)
+
 
 @app.route('/training')
 def training():
@@ -140,6 +146,18 @@ def shop():
 def logout():
     session.pop('username', None)
     return redirect(url_for('home'))
+@app.route('/log_water', methods=['POST'])
+def log_water():
+    if 'username' not in session: return redirect(url_for('home'))
+    amount = request.form.get('amount')
+    if amount:
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO water_logs (username, amount) VALUES (?, ?)", (session['username'], amount))
+        conn.commit()
+        conn.close()
+        flash(f"Successfully logged {amount}ml water!", "success")
+    return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)
